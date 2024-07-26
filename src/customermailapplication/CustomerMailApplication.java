@@ -11,47 +11,45 @@ import java.util.Scanner;
 /**
  *
  * @author sarun
- */
+ * @editted by 64050030_Kitipum_Nornua
+ */ 
 public class CustomerMailApplication {
 
     /**
      * @param args the command line arguments
      */
     private Customer customer;
-    public void getCustomerTypeFromUser(String customerType) {
-        switch(customerType) {
-            case "Regular":
-                customer = new RegularCustomer();
+    
+    public CustomerMailApplication(Customer customer){
+        this.customer = customer;
+    }
+    public static String getCustomerTypeFromUser() {
+        String customerType = null;
+        Scanner inp = new Scanner(System.in);
+        System.out.print("Please choose customer type 1. Regular, 2. Mountain, 3. Delinquent ");
+        int type = inp.nextInt();
+        switch(type) {
+            case 1:
+                customerType = "Regular";
                 break;
-            case "Mountain":
-                customer = new MountainCustomer();
+            case 2:
+                customerType = "Mountain";
                 break;
-            case "Delinquent":
-                customer = new DelinquentCustomer();
+            case 3:
+                customerType = "Delinquent";
                 break;
         }
+        inp.close();
+        return customerType;
     }
     public String generateMail() {
         return customer.createMail();
     }
     
     public static void main(String[] args) {
-        CustomerMailApplication app = new CustomerMailApplication();
-        Scanner inp = new Scanner(System.in);
-        System.out.print("Please choose customer type 1. Regular, 2. Mountain, 3. Delinquent ");
-        int type = inp.nextInt();
-        switch(type) {
-            case 1:
-                app.getCustomerTypeFromUser("Regular");
-                break;
-            case 2:
-                app.getCustomerTypeFromUser("Mountain");
-                break;
-            case 3:
-                app.getCustomerTypeFromUser("Delinquent");
-                break;
-            
-        }
-        System.out.println(app.generateMail());        
+        String customerType = getCustomerTypeFromUser();
+        Customer customer  = CustomerFactory.createCustomer(customerType);
+        CustomerMailApplication app = new CustomerMailApplication(customer);
+        System.out.println(app.generateMail());     
     }
 }
